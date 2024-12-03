@@ -3,7 +3,7 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	day2()
+	day2test()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -65,13 +65,11 @@ func day2():
 		for i in range(len(line) - 1):
 			if line[i] == line[i + 1]:
 				safe = false
+				break
 			var d = line[i + 1] - line[i]
 			if not growth:
 				growth = sign(d)
-			#fix this it's goofy
-			elif growth == sign(d) and 0 < abs(d) <= 3:
-				continue
-			else:
+			if abs(d) > 3 or abs(d) < 0 or growth != sign(d):
 				safe = false
 				break
 		if safe:
@@ -80,15 +78,35 @@ func day2():
 	print(safecount)
 
 
+func day2star():
+	var grid = []
+	var safecount = 0
+	var mainlist = load_from_file("day2test")
+	for line in mainlist:
+		if line != "":
+			var splitline = line.rsplit(" ", false, 0)
+			var intline = []
+			for i in splitline:
+				intline.append(int(i))
+			grid.append(intline)
+	for line in grid:
+		var growth = null
+		var safe = true
+		for i in range(len(line) - 1):
+			if line[i] == line[i + 1]:
+				safe = false
+				break
+			var d = line[i + 1] - line[i]
+			if not growth:
+				growth = sign(d)
+			if abs(d) > 3 or abs(d) < 0 or growth != sign(d):
+				safe = false
+				break
+		if safe:
+			safecount += 1
+			print(line)
+	print(safecount)
 			
-
-			
-
-
-
-
-
-
 
 func load_from_file(input):
 	var file = FileAccess.open(input, FileAccess.READ)
