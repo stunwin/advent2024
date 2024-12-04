@@ -3,7 +3,7 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	day3star()
+	day4()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -138,6 +138,21 @@ func day3star():
 				var fullmatch = match.get_string().lstrip("mul()").rstrip(")").rsplit(",", false, 0)
 				total += int(fullmatch[0]) * int(fullmatch[1])
 	print(total)
+func day4():
+	var grid = arr_from_file("day4test")
+	print(grid)
+	for row in range(len(grid)):
+		for col in range(len(grid[0])):
+			if grid[row][col] == "X":
+				mascheck(grid, row, col, 1)
+func mascheck(grid, xrow, xcol, idx, vec = null):
+	var XMAS = "XMAS"
+	for i in range(-1, 1):
+		for j in range(-1, 1):
+			#oh need to filter edge cases here
+			if grid[xrow + i][xcol + j] == XMAS[idx]:
+				print(str(xrow + i) + ", " + str(xcol + j))
+			
 
 func string_from_file(input):
 	var file = FileAccess.open(input, FileAccess.READ)
@@ -148,4 +163,5 @@ func arr_from_file(input):
 	var arr = []
 	while not file.eof_reached():
 		arr.append(file.get_line())
+	arr.pop_back()
 	return arr
