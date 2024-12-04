@@ -3,7 +3,7 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	day3()
+	day3star()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -108,7 +108,6 @@ func day2star():
 	print(safecount)
 			
 func day3():
-	var teststring = "xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))G"
 	var input = string_from_file("day3input")
 	var regex = RegEx.new()
 	var total = 0
@@ -121,6 +120,24 @@ func day3():
 		total += int(fullmatch[0]) * int(fullmatch[1])
 	print(total)
 
+func day3star():
+	var input = string_from_file("day3input")
+	var regex = RegEx.new()
+	var total = 0
+	var chunkarray = input.rsplit("do", false, 0)
+	var count = true
+
+	for chunk in chunkarray:
+		if chunk.findn("n't()") == 0:
+			count = false
+		elif chunk.findn("()") == 0 or count:
+			count = true
+			regex.compile("mul\\(\\d{1,3},\\d{1,3}\\)")
+			var matches = regex.search_all(chunk)
+			for match in matches:
+				var fullmatch = match.get_string().lstrip("mul()").rstrip(")").rsplit(",", false, 0)
+				total += int(fullmatch[0]) * int(fullmatch[1])
+	print(total)
 
 func string_from_file(input):
 	var file = FileAccess.open(input, FileAccess.READ)
