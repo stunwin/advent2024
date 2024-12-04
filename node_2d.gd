@@ -3,7 +3,7 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	day2test()
+	day3()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -16,7 +16,7 @@ func day1():
 	var list2 = []
 	var totaldiff = 0
 	
-	var mainlist = load_from_file("day1input")
+	var mainlist = arr_from_file("day1input")
 	for line in mainlist:
 		if line != "":
 			var splitline = line.rsplit("   ", false, 0)
@@ -36,7 +36,7 @@ func day1star():
 	var list2 = []
 	var score = 0
 	
-	var mainlist = load_from_file("day1input")
+	var mainlist = arr_from_file("day1input")
 	for line in mainlist:
 		if line != "":
 			var splitline = line.rsplit("   ", false, 0)
@@ -51,7 +51,7 @@ func day1star():
 func day2():
 	var grid = []
 	var safecount = 0
-	var mainlist = load_from_file("day2input")
+	var mainlist = arr_from_file("day2input")
 	for line in mainlist:
 		if line != "":
 			var splitline = line.rsplit(" ", false, 0)
@@ -81,7 +81,7 @@ func day2():
 func day2star():
 	var grid = []
 	var safecount = 0
-	var mainlist = load_from_file("day2test")
+	var mainlist = arr_from_file("day2test")
 	for line in mainlist:
 		if line != "":
 			var splitline = line.rsplit(" ", false, 0)
@@ -107,8 +107,26 @@ func day2star():
 			print(line)
 	print(safecount)
 			
+func day3():
+	var teststring = "xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))G"
+	var input = string_from_file("day3input")
+	var regex = RegEx.new()
+	var total = 0
+	#plz help im not good at computer
+	regex.compile("mul\\(\\d{1,3},\\d{1,3}\\)")
+	var matches = regex.search_all(input)
+	for match in matches:
+		print(match.get_string())
+		var fullmatch = match.get_string().lstrip("mul()").rstrip(")").rsplit(",", false, 0)
+		total += int(fullmatch[0]) * int(fullmatch[1])
+	print(total)
 
-func load_from_file(input):
+
+func string_from_file(input):
+	var file = FileAccess.open(input, FileAccess.READ)
+	return file.get_as_text()
+
+func arr_from_file(input):
 	var file = FileAccess.open(input, FileAccess.READ)
 	var arr = []
 	while not file.eof_reached():
