@@ -138,21 +138,42 @@ func day3star():
 				var fullmatch = match.get_string().lstrip("mul()").rstrip(")").rsplit(",", false, 0)
 				total += int(fullmatch[0]) * int(fullmatch[1])
 	print(total)
+
+
+
 func day4():
-	var grid = arr_from_file("day4test")
-	print(grid)
+	var totalcount = 0
+	var grid = arr_from_file("day4input")
 	for row in range(len(grid)):
 		for col in range(len(grid[0])):
 			if grid[row][col] == "X":
-				mascheck(grid, row, col, 1)
-func mascheck(grid, xrow, xcol, idx, vec = null):
-	var XMAS = "XMAS"
-	for i in range(-1, 1):
-		for j in range(-1, 1):
-			#oh need to filter edge cases here
-			if grid[xrow + i][xcol + j] == XMAS[idx]:
-				print(str(xrow + i) + ", " + str(xcol + j))
-			
+				totalcount += mcheck(grid, row, col)
+	print(totalcount)
+
+
+
+func mcheck(grid, row, col) :
+	var count = 0
+	for i in range(-1, 2):
+		for j in range(-1, 2):
+			if boundarycheck(row, col, i, j, grid):
+				continue
+			if grid[row + i][col + j] == "M" and ascheck(grid, row, col, i, j):
+				count += 1
+	return count
+
+func ascheck(grid, row, col, i, j):
+	row = row + i
+	col = col + j
+	if boundarycheck(row, col, i, j, grid) or boundarycheck(row, col, 2 * i, 2 * j, grid):
+		return false
+	if grid[row + i][col + j] == "A" and grid[row + 2 * i][col + 2 * j] == "S":
+		return true
+	else:
+		return false
+
+func boundarycheck(row, col, i, j, grid):
+		return row + i < 0 or row + i >= len(grid) or col + j < 0 or col + j >= len(grid[0])
 
 func string_from_file(input):
 	var file = FileAccess.open(input, FileAccess.READ)
