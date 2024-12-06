@@ -202,7 +202,7 @@ func day5():
 
 
 func day5star():
-	var infiles = day5input("day5input")
+	var infiles = day5input("day5test")
 	var rules = infiles[0]
 	var books = infiles[1]
 	var badbooks = []
@@ -215,6 +215,7 @@ func day5star():
 			if book.find(rule[0]) > book.find(rule[1]):
 				badbooks.append(book)
 				break
+	var swapcount = 0
 	for book in badbooks:
 		var swapped = true		
 		while swapped:
@@ -231,10 +232,20 @@ func day5star():
 					var swap = book[i]
 					book[i] = book[j]
 					book[j] = swap
+			
+			swapcount += 1	
+				
+			print(swapcount)
+
+
+
+
+
 	for book in badbooks:
 		var middle = int(len(book))/2
 		total += int(book[middle])
 
+	print(badbooks)
 	print(total)
 
 
