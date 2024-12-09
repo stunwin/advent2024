@@ -3,7 +3,7 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	day5star()
+	day6()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -238,15 +238,46 @@ func day5star():
 	print(total)
 
 
+func day6():
+	var grid = arr_from_file("day6input", true)
+	var direction = [Vector2i(-1, 0), Vector2i(0, 1),  Vector2i(1, 0),  Vector2i(0, -1), ]
+	var location = Vector2i()
+	var diridx = 0
+	var elfvector = direction[diridx]
+	var coverage = 0
+
+	for row in len(grid):
+		if grid[row].find("^") != -1:
+			location.x = row
+			location.y = grid[row].find("^")
+			grid[location.x][location.y] = "X"
+			break
+	while not boundarycheck(location.x, location.y, elfvector.x, elfvector.y, grid):
+		var next = location + elfvector
+		if grid[next.x][next.y] == "#":
+			diridx += 1
+			elfvector = direction[diridx % 4]
+		else:
+			location = location + elfvector
+			grid[location.x][location.y] = "X"
+		# for row in len(grid):
+		# 	print("".join(grid[row]))
+
+		
+	for row in grid:
+		coverage = coverage + row.count("X")
+	
+	print(coverage)
+			
+		
+		
+
+	
 
 
 
 
-
-
-
-
-
+		
 
 
 
@@ -280,8 +311,10 @@ func day5input(input):
 	for book in pages:
 		var intpage = book.rsplit(",", false, 0)
 		pageints.append(intpage) 
+
 	
 	return [ ruleints, pageints ]
+
 
 	
 
@@ -290,10 +323,19 @@ func string_from_file(input):
 	var file = FileAccess.open(input, FileAccess.READ)
 	return file.get_as_text()
 
-func arr_from_file(input):
+func arr_from_file(input, twod = false):
 	var file = FileAccess.open(input, FileAccess.READ)
 	var arr = []
+	var twodarr = []
 	while not file.eof_reached():
 		arr.append(file.get_line())
 	arr.pop_back()
+	if twod:
+		for line in arr:
+			var linearr = []
+			for c in line:
+				linearr.append(c)
+			twodarr.append(linearr)
+		arr = twodarr
+				
 	return arr
