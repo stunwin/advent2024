@@ -3,7 +3,7 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	day6()
+	day7()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -269,15 +269,71 @@ func day6():
 	
 	print(coverage)
 			
-		
-		
+func day7():
+	var list = arr_from_file("day7input")
+	var fixed_list = []	
+	var short_list = []
+	var total = 0
 
+	for line in list:
+		var intline = []
+		var fixed_line = line.rsplit(" ")
+		fixed_line[0] = fixed_line[0].rstrip(":")
+		# print(fixed_line)
+		for i in range(len(fixed_line)):
+			intline.append(int(fixed_line[i]))
+		fixed_list.append(intline)
+	list = fixed_list
+	# print(len(list))
+	#
+	# for line in list:
+	# 	if addall(line) and multall(line):
+	# 		short_list.append(line)
+	# list = short_list
+	# print(len(list))
+	for line in list:
+		if ungabunga(line, 2, line[0], line[1]):
+			total += line[0]
+	print(total)
+		
+func ungabunga(line, depth, goal, total):
+	var multtotal = total * line[depth]
+	var addtotal = total + line[depth]
+	if depth == len(line) - 1 and (multtotal == goal or addtotal == goal):
+		# print(line)
+		return true
+		
+	elif depth == len(line) - 1:
+		return false
+	var mult = ungabunga(line, depth + 1, line[0], multtotal)
+	var plus = ungabunga(line, depth + 1, line[0], addtotal)
+	if mult or plus:
+		return true
+
+
+
+
+func addall(line):
+	var goal = line[0]
+	var total = 0
+	for i in range(1, len(line)):
+		total += line[i]
+	if total > goal:
+		# print("addall failed, total (" + str(total) + ") is higher than goal (" + str(goal) + ")")
+		return false
+	else:
+		return true
 	
-
-
-
-
-		
+func multall(line):
+	var goal = line[0]
+	var total = line[1]
+	for i in range(2, len(line)):
+		total *= line[i]
+	if total < goal:
+		# print("multall failed, total (" + str(total) + ") is lower than goal (" + str(goal) + ")")
+		return false
+	else:
+		return true
 
 
 
