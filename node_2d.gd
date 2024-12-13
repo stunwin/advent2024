@@ -3,7 +3,7 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	day7()
+	day8()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -296,6 +296,45 @@ func day7():
 			total += line[0]
 	print(total)
 		
+func day8():
+	var grid = arr_from_file("day8input")
+	var charlist = []
+	var directory = []
+	var resultlist= grid.duplicate(true)
+	var count = 0
+	for row in grid:
+		for i in len(row):
+			if row[i] not in charlist:
+				charlist.append(row[i])
+	for i in charlist:
+		if i == ".":
+			continue
+		directory.append(towerfinder(i, grid))
+	for set in directory:
+		for tower in set:
+			for tower2 in set:
+				if tower == tower2:
+					continue
+				var vec = tower2 - tower
+				var result = tower2 + vec
+				if not boundarycheck(result.x, result.y, 0, 0, grid) and resultlist[result.x][result.y] != "#":
+					count += 1
+					resultlist[result.x][result.y] = "#"
+	print(resultlist)
+	print(count)
+
+			
+		
+
+func towerfinder(letter, grid):
+	var coordlist = []
+	for i in len(grid):
+		for j in len(grid[0]):
+			if grid[i][j] == letter:
+				var coord = Vector2i(i, j)
+				coordlist.append(coord)
+	return coordlist
+
 func ungabunga(line, depth, goal, total):
 	var multtotal = total * line[depth]
 	var addtotal = total + line[depth]
